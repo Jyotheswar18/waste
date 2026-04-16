@@ -1,0 +1,181 @@
+PART 1: Create Project Structure
+Step 1: Create folder
+university-dept/
+│
+├── index.html
+├── style.css
+├── Dockerfile
+├── deployment.yaml
+├── service.yaml
+✅ PART 2: HTML Code
+📄 index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Computer Science Department</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>XYZ University</h1>
+    <h2>Department of Computer Science</h2>
+    <p>Head: Dr. John Doe</p>
+</header>
+
+<section>
+    <h2>About Department</h2>
+    <p>The Computer Science department focuses on software development, AI, and data science.</p>
+</section>
+
+<section>
+    <h2>Courses Offered</h2>
+    <ul>
+        <li>Data Structures</li>
+        <li>Operating Systems</li>
+        <li>Machine Learning</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Faculty</h2>
+    <p>Dr. John Doe - AI</p>
+    <p>Dr. Jane Smith - Networks</p>
+</section>
+
+<section>
+    <h2>Contact</h2>
+    <p>Address: XYZ University, Chennai</p>
+    <p>Phone: 9876543210</p>
+    <p>Email: cs@xyz.edu</p>
+</section>
+
+<footer>
+    <p>© 2026 XYZ University</p>
+</footer>
+
+</body>
+</html>
+🎨 style.css
+body {
+    font-family: Arial;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+}
+
+section {
+    padding: 20px;
+}
+
+footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+✅ PART 3: GitHub Steps
+Step 2: Initialize Git
+git init
+git add .
+git commit -m "Initial commit"
+Step 3: Connect to GitHub
+git remote add origin https://github.com/your-username/university-dept.git
+git push -u origin master
+✅ PART 4: Docker Setup
+📦 Dockerfile
+FROM nginx:alpine
+COPY . /usr/share/nginx/html
+EXPOSE 80
+Step 4: Build Docker Image
+docker build -t university-app .
+Step 5: Run Container
+docker run -d -p 8081:80 university-app
+
+👉 Open browser:
+
+http://localhost:8081
+✅ PART 5: Kubernetes Deployment
+📄 deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: university-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: university
+  template:
+    metadata:
+      labels:
+        app: university
+    spec:
+      containers:
+      - name: university-container
+        image: university-app
+        ports:
+        - containerPort: 80
+📄 service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: university-service
+spec:
+  type: NodePort
+  selector:
+    app: university
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30007
+Step 6: Apply Kubernetes
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+
+👉 Access:
+
+http://localhost:30007
+✅ PART 6: Jenkins Pipeline
+Step 7: Install Plugins
+Docker Pipeline
+Kubernetes CLI
+Git
+Step 8: Create Jenkins Pipeline Job
+📄 Jenkinsfile
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Clone') {
+            steps {
+                git 'https://github.com/your-username/university-dept.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build -t university-app .'
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                bat 'docker run -d -p 8082:80 university-app'
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                bat 'kubectl apply -f deployment.yaml'
+                bat 'kubectl apply -f service.yaml'
+            }
+        }
+    }
+}
